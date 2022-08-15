@@ -38,17 +38,13 @@ public class QuestionService {
 
     @Transactional
     public ResponseDto<?> createQuestion(MultipartFile multipartFile, QuestionRequestDto questionRequestDto, HttpServletRequest request) throws IOException {
-        if (null == request.getHeader("Refresh-Token")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
 
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
 
-        Member member = validateMember(request);
+        Member member = validateMember();
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
@@ -138,17 +134,13 @@ public class QuestionService {
 
     @Transactional
     public ResponseDto<?> updateQuestion(Long questionId, MultipartFile multipartFile, QuestionRequestDto questionRequestDto, HttpServletRequest request) throws IOException {
-        if (null == request.getHeader("Refresh-Token")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
 
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
 
-        Member member = validateMember(request);
+        Member member = validateMember();
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
@@ -175,17 +167,13 @@ public class QuestionService {
 
     @Transactional
     public ResponseDto<?> deleteQuestion(Long questionId, HttpServletRequest request) {
-        if (null == request.getHeader("Refresh-Token")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
 
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
 
-        Member member = validateMember(request);
+        Member member = validateMember();
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
@@ -210,10 +198,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public Member validateMember(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-            return null;
-        }
+    public Member validateMember() {
         return tokenProvider.getMemberFromAuthentication();
     }
 

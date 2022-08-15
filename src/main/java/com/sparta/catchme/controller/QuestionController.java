@@ -1,13 +1,10 @@
 package com.sparta.catchme.controller;
 
-import com.sparta.catchme.domain.Question;
 import com.sparta.catchme.dto.request.QuestionRequestDto;
-import com.sparta.catchme.dto.response.QuestionResponseDto;
 import com.sparta.catchme.dto.response.ResponseDto;
 import com.sparta.catchme.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

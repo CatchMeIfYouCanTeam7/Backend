@@ -49,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
     Key key = Keys.hmacShaKeyFor(keyBytes);
 
     String jwt = resolveToken(request);
-
+    //여기서 벨리데이터 토큰으로 작업 하고있음.
     if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
       Claims claims;
       try {
@@ -85,9 +85,8 @@ public class JwtFilter extends OncePerRequestFilter {
   private String resolveToken(HttpServletRequest request) {
     String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
     if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-      return bearerToken.substring(7);
+      return bearerToken.substring(7);            // access토큰 받은거 berrer 빼는 동작 !
     }
     return null;
   }
-
 }

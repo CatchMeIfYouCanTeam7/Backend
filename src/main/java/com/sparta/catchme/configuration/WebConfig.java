@@ -2,9 +2,11 @@ package com.sparta.catchme.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
@@ -12,6 +14,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("*")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .exposedHeaders("*")
+                .exposedHeaders("Authorization")
+                .exposedHeaders("Refresh-Token")
+                .maxAge(3000);
     }
 }

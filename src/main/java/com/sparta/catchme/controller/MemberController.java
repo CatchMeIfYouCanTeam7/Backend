@@ -36,13 +36,13 @@ public class MemberController {
   }
 
   //이메일 중복확인
-  @RequestMapping(value = "/api/members/emailCheck", method = RequestMethod.GET)
+  @RequestMapping(value = "/api/members/email/check", method = RequestMethod.GET)
   public ResponseDto<?> emailCheck(@RequestBody MemberRequestDto requestDto) {
       return memberService.checkEmail(requestDto);
   }
 
   //닉네임 중복확인
-  @RequestMapping(value = "/api/members/nicknameCheck", method = RequestMethod.GET)
+  @RequestMapping(value = "/api/members/nickname/check", method = RequestMethod.GET)
   public ResponseDto<?> nicknameCheck(@RequestBody MemberRequestDto requestDto) {
       return memberService.checkNickname(requestDto);
   }
