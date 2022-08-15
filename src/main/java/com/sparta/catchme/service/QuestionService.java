@@ -69,6 +69,7 @@ public class QuestionService {
                         .hint(question.getHint())
                         .answer(question.getAnswer())
                         .createdAt(question.getCreatedAt())
+                        .modifiedAt(question.getModifiedAt())
                         .build()
         );
     }
@@ -84,27 +85,17 @@ public class QuestionService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : commentList) {
-            if (successOrFailure(questionId, comment.getComment())) {
-                commentResponseDtoList.add(
-                        CommentResponseDto.builder()
-                                .id(comment.getId())
-                                .author(comment.getMember().getNickname())
-                                .comment(comment.getComment())
-                                .trueOrFalse(true)
-                                .createdAt(comment.getCreatedAt())
-                                .build()
-                );
-            } else {
-                commentResponseDtoList.add(
-                        CommentResponseDto.builder()
-                                .id(comment.getId())
-                                .author(comment.getMember().getNickname())
-                                .comment(comment.getComment())
-                                .trueOrFalse(false)
-                                .createdAt(comment.getCreatedAt())
-                                .build()
-                );
-            }
+            commentResponseDtoList.add(
+                    CommentResponseDto.builder()
+                            .id(comment.getId())
+                            .author(comment.getMember().getNickname())
+                            .comment(comment.getComment())
+                            .trueOrFalse(successOrFailure(questionId, comment.getComment()))
+                            .createdAt(comment.getCreatedAt())
+                            .modifiedAt(comment.getModifiedAt())
+                            .build()
+            );
+
         }
         return ResponseDto.success(
                 QuestionResponseDto.builder()
@@ -114,6 +105,7 @@ public class QuestionService {
                         .hint(question.getHint())
                         .commentResponseDto(commentResponseDtoList)
                         .createdAt(question.getCreatedAt())
+                        .modifiedAt(question.getModifiedAt())
                         .build()
         );
     }
@@ -128,7 +120,10 @@ public class QuestionService {
                             .id(question.getId())
                             .author(question.getMember().getNickname())
                             .imgUrl(question.getImgUrl())
+                            .hint(question.getHint())
+                            .answer(question.getAnswer())
                             .createdAt(question.getCreatedAt())
+                            .modifiedAt(question.getModifiedAt())
                             .build()
             );
         }
@@ -169,6 +164,10 @@ public class QuestionService {
                         .id(question.getId())
                         .author(question.getMember().getNickname())
                         .imgUrl(question.getImgUrl())
+                        .hint(question.getHint())
+                        .answer(question.getAnswer())
+                        .createdAt(question.getCreatedAt())
+                        .modifiedAt(question.getModifiedAt())
                         .build()
         );
     }
