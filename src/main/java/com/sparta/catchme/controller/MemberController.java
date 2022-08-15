@@ -1,0 +1,49 @@
+package com.sparta.catchme.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import com.sparta.catchme.dto.request.LoginRequestDto;
+import com.sparta.catchme.dto.request.MemberRequestDto;
+import com.sparta.catchme.dto.response.ResponseDto;
+import com.sparta.catchme.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequiredArgsConstructor
+@RestController
+public class MemberController {
+
+  private final MemberService memberService;
+  @RequestMapping(value = "/api/members/signup", method = RequestMethod.POST)
+  public ResponseDto<?> signup(@RequestBody @Valid MemberRequestDto requestDto) {
+    return memberService.createEmail(requestDto);
+  }
+
+  @RequestMapping(value = "/api/members/login", method = RequestMethod.POST)
+  public ResponseDto<?> login(@RequestBody @Valid LoginRequestDto requestDto,
+                              HttpServletResponse response
+  ) {
+    return memberService.login(requestDto, response);
+  }
+
+  @RequestMapping(value = "/api/auth/members/logout", method = RequestMethod.POST)
+  public ResponseDto<?> logout(HttpServletRequest request) {
+    return memberService.logout(request);
+  }
+
+  //이메일 중복확인
+  @RequestMapping(value = "/api/members/emailCheck", method = RequestMethod.GET)
+  public ResponseDto<?> emailCheck(@RequestBody MemberRequestDto requestDto) {
+      return memberService.checkEmail(requestDto);
+  }
+
+  //닉네임 중복확인
+  @RequestMapping(value = "/api/members/nicknameCheck", method = RequestMethod.GET)
+  public ResponseDto<?> nicknameCheck(@RequestBody MemberRequestDto requestDto) {
+      return memberService.checkNickname(requestDto);
+  }
+}
