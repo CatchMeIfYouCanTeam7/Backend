@@ -59,6 +59,7 @@ public class CommentService {
                         .comment(comment.getComment())
                         .trueOrFalse(successOrFailure(requestDto.getQuestionId(), comment.getComment()))
                         .createdAt(comment.getCreatedAt())
+                        .modifiedAt(comment.getModifiedAt())
                         .build()
         );
     }
@@ -77,6 +78,7 @@ public class CommentService {
                         .comment(comment.getComment())
                         .trueOrFalse(successOrFailure(comment.getQuestion().getId(), comment.getComment()))
                         .createdAt(comment.getCreatedAt())
+                        .modifiedAt(comment.getModifiedAt())
                         .build()
         );
     }
@@ -99,6 +101,7 @@ public class CommentService {
                             .comment(comment.getComment())
                             .trueOrFalse(successOrFailure(questionId, comment.getComment()))
                             .createdAt(comment.getCreatedAt())
+                            .modifiedAt(comment.getModifiedAt())
                             .build()
             );
         }
