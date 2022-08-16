@@ -52,5 +52,4 @@ public class QuestionController  {
     public ResponseDto<?> deleteQuestion(@PathVariable Long questionId, HttpServletRequest request) {
         return questionService.deleteQuestion(questionId, request);
     }
-
 }

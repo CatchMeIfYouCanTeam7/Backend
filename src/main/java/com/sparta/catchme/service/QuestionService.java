@@ -171,10 +171,6 @@ public class QuestionService {
 
     @Transactional
     public ResponseDto<?> deleteQuestion(Long questionId, HttpServletRequest request) {
-<<<<<<< HEAD
-
-=======
->>>>>>> bae075db1d50229fbfb0c66fd8b3ba33e0d346b3
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
