@@ -49,6 +49,11 @@ public class QuestionService {
         }
 
         String imgUrl = awsS3Service.upload(multipartFile);
+
+        if (imgUrl.equals("false")) {
+            return ResponseDto.fail("NOT_IMAGE_FILE", "이미지 파일만 업로드 가능합니다.");
+        }
+
         Question question = Question.builder()
                 .imgUrl(imgUrl)
                 .member(member)
