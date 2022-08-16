@@ -1,9 +1,7 @@
 package com.sparta.catchme.service;
 
 import org.apache.tika.Tika;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -13,16 +11,16 @@ public class FileUtils {
 
     private static final Tika tika = new Tika();
 
-    public static File multipartFileToFile(MultipartFile multipartFile) {
-        try {
-            File file = new File(multipartFile.getOriginalFilename());
-            multipartFile.transferTo(file);
-            return file;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public static File multipartFileToFile(MultipartFile multipartFile) {
+//        try {
+//            File file = new File(multipartFile.getOriginalFilename());
+//            multipartFile.transferTo(file);
+//            return file;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     public static boolean validateImgFile(InputStream inputStream) {
         try {
