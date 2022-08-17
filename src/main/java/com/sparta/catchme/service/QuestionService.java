@@ -104,6 +104,7 @@ public class QuestionService {
                         .author(question.getMember().getNickname())
                         .imgUrl(question.getImgUrl())
                         .hint(question.getHint())
+                        .answer(question.getAnswer())
                         .commentResponseDto(commentResponseDtoList)
                         .createdAt(question.getCreatedAt())
                         .modifiedAt(question.getModifiedAt())

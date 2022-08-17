@@ -65,6 +65,8 @@ public class SecurityConfiguration {
         .antMatchers("/api/questions/**").permitAll()
         .antMatchers("/api/comments/**").permitAll()
         .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll() // CORS 설정
+        .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**" ,
+                    /*Probably not needed*/ "/swagger.json").permitAll()
         .anyRequest().authenticated()
 
         .and()
