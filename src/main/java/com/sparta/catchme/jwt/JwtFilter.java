@@ -65,6 +65,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 ResponseDto.fail("BAD_REQUEST", "Token이 유효햐지 않습니다.")
             )
         );
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me, Origin,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       }
 
