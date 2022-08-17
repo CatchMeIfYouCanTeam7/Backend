@@ -66,7 +66,7 @@ public class JwtFilter extends OncePerRequestFilter {
             )
         );
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me, Origin,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me, Origin,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,Access-Token-Expire-Time");
         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       }
 
