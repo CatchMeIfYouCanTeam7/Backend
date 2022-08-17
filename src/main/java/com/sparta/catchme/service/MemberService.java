@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
@@ -89,6 +88,7 @@ public class MemberService {
     }
     return tokenProvider.deleteRefreshToken(member);
   }
+
   @Transactional(readOnly = true)
   public Member isPresentMember(String email) {
     Optional<Member> optionalMember = memberRepository.findByEmail(email);
@@ -102,18 +102,19 @@ public class MemberService {
   }
 
   @Transactional(readOnly = true)
-  public ResponseDto<?> checkEmail(MemberRequestDto requestDto) {
-      if(isPresentMember(requestDto.getEmail()) != null) {
-          return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 이메일 입니다.");
+  public boolean checkDuplicateEmail(String email) {
+      if (memberRepository.countByEmail(email) != 0) {
+          return false;
       }
-      return ResponseDto.success("사용가능한 이메일 입니다.");
+      return true;
   }
 
   @Transactional(readOnly = true)
-  public ResponseDto<?> checkNickname(MemberRequestDto requestDto) {
-      if(isPresentMember(requestDto.getNickname()) != null) {
-          return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임 입니다.");
+  public boolean checkDuplicateNickname(String nickname) {
+      if (memberRepository.countByNickname(nickname) != 0) {
+          return false;
       }
-      return ResponseDto.success("사용가능한 아이디 입니다.");
+      return true;
   }
+
 }
