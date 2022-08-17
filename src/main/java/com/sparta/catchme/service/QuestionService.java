@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,8 +50,8 @@ public class QuestionService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        String imgUrl = awsS3Service.upload(multipartFile);
-
+        String fileName = awsS3Service.upload(multipartFile);
+        String imgUrl = URLDecoder.decode(fileName, "UTF-8");
         if (imgUrl.equals("false")) {
             return ResponseDto.fail("NOT_IMAGE_FILE", "이미지 파일만 업로드 가능합니다.");
         }

@@ -86,10 +86,7 @@ public class MemberService {
     );
   }
 
-  public ResponseDto<?> logout(HttpServletRequest request) {
-    if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-      return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
-    }
+  public ResponseDto<?> logout() {
     Member member = tokenProvider.getMemberFromAuthentication();
     if (null == member) {
       return ResponseDto.fail("MEMBER_NOT_FOUND",
