@@ -77,7 +77,7 @@ public class QuestionService {
 
     @Transactional(readOnly = true)
     public ResponseDto<?> getQuestion(Long questionId) {
-        Question question = isPresentQuestion(questionId);
+        Question question = checkingPresenceQuestion(questionId);
         if (null == question) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
@@ -91,7 +91,7 @@ public class QuestionService {
                             .id(comment.getId())
                             .author(comment.getMember().getNickname())
                             .comment(comment.getComment())
-                            .trueOrFalse(successOrFailure(questionId, comment.getComment()))
+                            .trueOrFalse(checkCorrectAnswer(questionId, comment.getComment()))
                             .createdAt(comment.getCreatedAt())
                             .modifiedAt(comment.getModifiedAt())
                             .build()
@@ -145,7 +145,7 @@ public class QuestionService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        Question question = isPresentQuestion(questionId);
+        Question question = checkingPresenceQuestion(questionId);
         if (null == question) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
@@ -181,7 +181,7 @@ public class QuestionService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        Question question = isPresentQuestion(questionId);
+        Question question = checkingPresenceQuestion(questionId);
         if (null == question) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
@@ -195,7 +195,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public Question isPresentQuestion(Long questionId) {
+    public Question checkingPresenceQuestion(Long questionId) {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         return optionalQuestion.orElse(null);
     }
@@ -206,7 +206,7 @@ public class QuestionService {
     }
 
     @Transactional(readOnly = true)
-    public boolean successOrFailure(Long questionId, String comment) {
+    public boolean checkCorrectAnswer(Long questionId, String comment) {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         String answer = optionalQuestion.orElse(null).getAnswer();
         if (!answer.equals(comment)) { return false; }
