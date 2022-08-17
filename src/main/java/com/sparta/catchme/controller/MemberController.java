@@ -5,10 +5,7 @@ import com.sparta.catchme.dto.request.MemberRequestDto;
 import com.sparta.catchme.dto.response.ResponseDto;
 import com.sparta.catchme.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -36,14 +33,14 @@ public class MemberController {
   }
 
   //이메일 중복확인
-  @RequestMapping(value = "/api/members/email/check", method = RequestMethod.GET)
-  public ResponseDto<?> emailCheck(@RequestBody MemberRequestDto requestDto) {
-      return memberService.checkEmail(requestDto);
+  @RequestMapping(value = "/api/members/email-check", method = RequestMethod.GET)
+  public ResponseDto<?> emailCheck(String email){
+      return memberService.checkEmail(email);
   }
 
   //닉네임 중복확인
-  @RequestMapping(value = "/api/members/nickname/check", method = RequestMethod.GET)
-  public ResponseDto<?> nicknameCheck(@RequestBody MemberRequestDto requestDto) {
-      return memberService.checkNickname(requestDto);
+  @RequestMapping(value = "/api/members/nickname-check", method = RequestMethod.GET)
+  public ResponseDto<?> nicknameCheck(String nickname){
+      return memberService.checkNickname(nickname);
   }
 }
