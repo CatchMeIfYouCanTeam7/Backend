@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,22 +39,22 @@ public class QuestionService {
 
     @Transactional
     public ResponseDto<?> createQuestion(MultipartFile multipartFile, QuestionRequestDto questionRequestDto, HttpServletRequest request) throws IOException {
-        if (null == request.getHeader("Refresh-Token")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
-
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
 
-        Member member = validateMember(request);
+        Member member = validateMember();
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        String imgUrl = awsS3Service.upload(multipartFile);
+        String fileName = awsS3Service.upload(multipartFile);
+        String imgUrl = URLDecoder.decode(fileName, "UTF-8");
+        if (imgUrl.equals("false")) {
+            return ResponseDto.fail("NOT_IMAGE_FILE", "이미지 파일만 업로드 가능합니다.");
+        }
+
         Question question = Question.builder()
                 .imgUrl(imgUrl)
                 .member(member)
@@ -69,6 +70,7 @@ public class QuestionService {
                         .hint(question.getHint())
                         .answer(question.getAnswer())
                         .createdAt(question.getCreatedAt())
+                        .modifiedAt(question.getModifiedAt())
                         .build()
         );
     }
@@ -84,27 +86,17 @@ public class QuestionService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : commentList) {
-            if (successOrFailure(questionId, comment.getComment())) {
-                commentResponseDtoList.add(
-                        CommentResponseDto.builder()
-                                .id(comment.getId())
-                                .author(comment.getMember().getNickname())
-                                .comment(comment.getComment())
-                                .trueOrFalse(true)
-                                .createdAt(comment.getCreatedAt())
-                                .build()
-                );
-            } else {
-                commentResponseDtoList.add(
-                        CommentResponseDto.builder()
-                                .id(comment.getId())
-                                .author(comment.getMember().getNickname())
-                                .comment(comment.getComment())
-                                .trueOrFalse(false)
-                                .createdAt(comment.getCreatedAt())
-                                .build()
-                );
-            }
+            commentResponseDtoList.add(
+                    CommentResponseDto.builder()
+                            .id(comment.getId())
+                            .author(comment.getMember().getNickname())
+                            .comment(comment.getComment())
+                            .trueOrFalse(successOrFailure(questionId, comment.getComment()))
+                            .createdAt(comment.getCreatedAt())
+                            .modifiedAt(comment.getModifiedAt())
+                            .build()
+            );
+
         }
         return ResponseDto.success(
                 QuestionResponseDto.builder()
@@ -114,6 +106,7 @@ public class QuestionService {
                         .hint(question.getHint())
                         .commentResponseDto(commentResponseDtoList)
                         .createdAt(question.getCreatedAt())
+                        .modifiedAt(question.getModifiedAt())
                         .build()
         );
     }
@@ -128,7 +121,10 @@ public class QuestionService {
                             .id(question.getId())
                             .author(question.getMember().getNickname())
                             .imgUrl(question.getImgUrl())
+                            .hint(question.getHint())
+                            .answer(question.getAnswer())
                             .createdAt(question.getCreatedAt())
+                            .modifiedAt(question.getModifiedAt())
                             .build()
             );
         }
@@ -138,17 +134,12 @@ public class QuestionService {
 
     @Transactional
     public ResponseDto<?> updateQuestion(Long questionId, MultipartFile multipartFile, QuestionRequestDto questionRequestDto, HttpServletRequest request) throws IOException {
-        if (null == request.getHeader("Refresh-Token")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
-
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
 
-        Member member = validateMember(request);
+        Member member = validateMember();
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
@@ -169,23 +160,22 @@ public class QuestionService {
                         .id(question.getId())
                         .author(question.getMember().getNickname())
                         .imgUrl(question.getImgUrl())
+                        .hint(question.getHint())
+                        .answer(question.getAnswer())
+                        .createdAt(question.getCreatedAt())
+                        .modifiedAt(question.getModifiedAt())
                         .build()
         );
     }
 
     @Transactional
     public ResponseDto<?> deleteQuestion(Long questionId, HttpServletRequest request) {
-        if (null == request.getHeader("Refresh-Token")) {
-            return ResponseDto.fail("MEMBER_NOT_FOUND",
-                    "로그인이 필요합니다.");
-        }
-
         if (null == request.getHeader("Authorization")) {
             return ResponseDto.fail("MEMBER_NOT_FOUND",
                     "로그인이 필요합니다.");
         }
 
-        Member member = validateMember(request);
+        Member member = validateMember();
         if (null == member) {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
@@ -210,10 +200,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public Member validateMember(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
-            return null;
-        }
+    public Member validateMember() {
         return tokenProvider.getMemberFromAuthentication();
     }
 

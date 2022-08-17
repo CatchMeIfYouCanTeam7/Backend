@@ -16,5 +16,6 @@ public class CommentResponseDto {
     private String author;
     private String comment;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     private boolean trueOrFalse;
 }
