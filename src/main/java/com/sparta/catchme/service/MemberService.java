@@ -105,6 +105,9 @@ public class MemberService {
     Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
     return optionalMember.orElse(null);
   }
+      Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
+      return optionalMember.orElse(null);
+  }
   public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
     response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
     response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
@@ -123,6 +126,7 @@ public class MemberService {
   public ResponseDto<?> checkNickname(String nickname) {
       if(isPresentNickname(nickname) != null) {
         return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임 입니다.");
+          return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임 입니다.");
       }
       return ResponseDto.success("사용가능한 아이디 입니다.");
   }
