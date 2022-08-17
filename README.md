@@ -11,4 +11,4 @@
 여러분들의 창의력을 뽐내 보세요
 
 ###2.⏳ 프로젝트 기간
-<div align=center><strong>2022년 8월 12일 ~ 2022년 8월 18일 </strong></div>
+<div<strong>2022년 8월 12일 ~ 2022년 8월 18일 </strong></div>
