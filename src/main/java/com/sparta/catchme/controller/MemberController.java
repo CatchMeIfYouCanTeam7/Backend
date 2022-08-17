@@ -15,7 +15,6 @@ import javax.validation.Valid;
 public class MemberController {
 
   private final MemberService memberService;
-
   @RequestMapping(value = "/api/members/signup", method = RequestMethod.POST)
   public ResponseDto<?> signup(@RequestBody @Valid MemberRequestDto requestDto) {
     return memberService.createEmail(requestDto);
@@ -33,8 +32,17 @@ public class MemberController {
     return memberService.logout();
   }
 
+  //이메일 중복확인
+  @RequestMapping(value = "/api/members/email-check", method = RequestMethod.GET)
+  public ResponseDto<?> emailCheck(String email){
+  public ResponseDto<?> emailCheck(String email) {
+      return memberService.checkEmail(email);
+  }
 
-
-
-
+  //닉네임 중복확인
+  @RequestMapping(value = "/api/members/nickname-check", method = RequestMethod.GET)
+  public ResponseDto<?> nicknameCheck(String nickname){
+  public ResponseDto<?> nicknameCheck(String nickname) {
+      return memberService.checkNickname(nickname);
+  }
 }
