@@ -27,7 +27,7 @@ public class MemberService {
 
   @Transactional
   public ResponseDto<?> createEmail(MemberRequestDto requestDto) {
-    if (null != isPresentMember(requestDto.getEmail())) {
+    if (null != isPresentEmail(requestDto.getEmail())) {
       return ResponseDto.fail("DUPLICATED_NICKNAME",
               "중복된 이메일 입니다.");
     }
@@ -57,7 +57,7 @@ public class MemberService {
 
   @Transactional
   public ResponseDto<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
-    Member member = isPresentMember(requestDto.getEmail());
+    Member member = isPresentEmail(requestDto.getEmail());
     if (null == member) {
       return ResponseDto.fail("MEMBER_NOT_FOUND",
               "사용자를 찾을 수 없습니다.");
@@ -90,9 +90,15 @@ public class MemberService {
     return tokenProvider.deleteRefreshToken(member);
   }
   @Transactional(readOnly = true)
-  public Member isPresentMember(String email) {
+  public Member isPresentEmail(String email) {
     Optional<Member> optionalMember = memberRepository.findByEmail(email);
     return optionalMember.orElse(null);
+  }
+
+  @Transactional(readOnly = true)
+  public Member isPresentNickname(String nickname) {
+      Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
+      return optionalMember.orElse(null);
   }
 
   public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
@@ -102,16 +108,16 @@ public class MemberService {
   }
 
   @Transactional(readOnly = true)
-  public ResponseDto<?> checkEmail(MemberRequestDto requestDto) {
-      if(isPresentMember(requestDto.getEmail()) != null) {
+  public ResponseDto<?> checkEmail(String email) {
+      if(isPresentEmail(email) != null) {
           return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 이메일 입니다.");
       }
       return ResponseDto.success("사용가능한 이메일 입니다.");
   }
 
   @Transactional(readOnly = true)
-  public ResponseDto<?> checkNickname(MemberRequestDto requestDto) {
-      if(isPresentMember(requestDto.getNickname()) != null) {
+  public ResponseDto<?> checkNickname(String nickname) {
+      if(isPresentNickname(nickname) != null) {
           return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임 입니다.");
       }
       return ResponseDto.success("사용가능한 아이디 입니다.");
