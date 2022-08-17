@@ -1,8 +1,5 @@
 package com.sparta.catchme.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import com.sparta.catchme.dto.request.LoginRequestDto;
 import com.sparta.catchme.dto.request.MemberRequestDto;
 import com.sparta.catchme.dto.response.ResponseDto;
@@ -12,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -31,8 +31,8 @@ public class MemberController {
   }
 
   @RequestMapping(value = "/api/auth/members/logout", method = RequestMethod.POST)
-  public ResponseDto<?> logout(HttpServletRequest request) {
-    return memberService.logout(request);
+  public ResponseDto<?> logout() {
+    return memberService.logout();
   }
 
   //이메일 중복확인
