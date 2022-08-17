@@ -15,11 +15,11 @@
 <div> <strong>2022년 8월 12일 ~ 2022년 8월 18일 </strong></div>
 <br>
 3. 👨‍👩‍👧‍👦프로젝트 멤버<div>
-FE<br> 
+FrondEnd(React)<br> 
 배아랑이<br>
 나소나<br>
 김민석<br><br>
-BE<br>
+Backend(Spring)<br>
 김보슬<br>
 문경록<br>
 <br>
