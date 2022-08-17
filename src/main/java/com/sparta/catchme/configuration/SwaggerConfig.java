@@ -22,7 +22,6 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
-                .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.sparta.catchme.controller"))
                 .paths(PathSelectors.any())
@@ -43,13 +42,4 @@ public class SwaggerConfig {
         return produces;
     }
 
-    private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "Sample REST API",
-                "This is sample API.",
-                "V1",
-                "Terms of service",
-                new Contact("administrator", "www.example.com", "administrator@email.com"),
-                "License of API", "www.example.com", Collections.emptyList());
-    }
 }

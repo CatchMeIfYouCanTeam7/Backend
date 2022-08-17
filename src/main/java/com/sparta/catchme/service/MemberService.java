@@ -1,11 +1,6 @@
 package com.sparta.catchme.service;
 
 import com.sparta.catchme.domain.Member;
-import java.util.Optional;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.sparta.catchme.domain.RefreshToken;
 import com.sparta.catchme.dto.request.LoginRequestDto;
 import com.sparta.catchme.dto.request.MemberRequestDto;
 import com.sparta.catchme.dto.request.TokenDto;
@@ -18,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
@@ -32,7 +26,7 @@ public class MemberService {
 
   @Transactional
   public ResponseDto<?> createEmail(MemberRequestDto requestDto) {
-    if (null != isPresentEmail(requestDto.getEmail())) {
+    if (null != isPresentMember(requestDto.getEmail())) {
       return ResponseDto.fail("DUPLICATED_NICKNAME",
               "중복된 이메일 입니다.");
     }
@@ -62,7 +56,7 @@ public class MemberService {
 
   @Transactional
   public ResponseDto<?> login(LoginRequestDto requestDto, HttpServletResponse response) {
-    Member member = isPresentEmail(requestDto.getEmail());
+    Member member = isPresentMember(requestDto.getEmail());
     if (null == member) {
       return ResponseDto.fail("MEMBER_NOT_FOUND",
               "사용자를 찾을 수 없습니다.");
@@ -95,19 +89,11 @@ public class MemberService {
     return tokenProvider.deleteRefreshToken(member);
   }
   @Transactional(readOnly = true)
-  public Member isPresentEmail(String email) {
+  public Member isPresentMember(String email) {
     Optional<Member> optionalMember = memberRepository.findByEmail(email);
     return optionalMember.orElse(null);
   }
 
-  @Transactional(readOnly = true)
-  public Member isPresentNickname(String nickname) {
-    Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
-    return optionalMember.orElse(null);
-  }
-      Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
-      return optionalMember.orElse(null);
-  }
   public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
     response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
     response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
@@ -115,19 +101,17 @@ public class MemberService {
   }
 
   @Transactional(readOnly = true)
-  public ResponseDto<?> checkEmail(String email) {
-      if(isPresentEmail(email) != null) {
-          return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 이메일 입니다.");
-      }
-      return ResponseDto.success("사용가능한 이메일 입니다.");
+  public boolean checkDuplicateEmail(String email) {
+    if(memberRepository.countByEmail(email) != 0) {
+      return false;
+    }
+    return true;
   }
-
   @Transactional(readOnly = true)
-  public ResponseDto<?> checkNickname(String nickname) {
-      if(isPresentNickname(nickname) != null) {
-        return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임 입니다.");
-          return ResponseDto.fail("DUPLICATED_NICKNAME", "중복된 닉네임 입니다.");
-      }
-      return ResponseDto.success("사용가능한 아이디 입니다.");
+  public boolean checkDuplicateNickname(String nickname) {
+    if(memberRepository.countByNickname(nickname) != 0) {
+      return false;
+    }
+    return true;
   }
 }
