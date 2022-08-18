@@ -58,8 +58,10 @@ Backend(Spring)<br>
   <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"><img src="https://img.shields.io/badge/Git-00000?style=for-the-badge&logo=Git&logoColor=F05032]"/><img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white]"/>
 
 # :key: 트러블 슈팅
+> 1) 백엔드 
+ 
+> 2) 백엔드 
+ 
 
- 
- 
  
  
