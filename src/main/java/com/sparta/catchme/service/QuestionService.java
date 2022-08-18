@@ -154,7 +154,12 @@ public class QuestionService {
             return ResponseDto.fail("BAD_REQUEST", "작성자만 수정할 수 있습니다.");
         }
 
-        String imgUrl = awsS3Service.upload(multipartFile);
+        String imgUrl = "";
+        if (multipartFile != null) {
+            imgUrl = awsS3Service.upload(multipartFile);
+        } else {
+            imgUrl = questionRepository.findById(questionId).get().getImgUrl();
+        }
         question.update(questionRequestDto, imgUrl);
         return ResponseDto.success(
                 QuestionResponseDto.builder()
