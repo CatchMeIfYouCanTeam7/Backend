@@ -40,7 +40,7 @@ public class CommentService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        Question question = questionService.isPresentQuestion(requestDto.getQuestionId());
+        Question question = questionService.checkingPresenceQuestion(requestDto.getQuestionId());
         if (null == question) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
@@ -57,7 +57,7 @@ public class CommentService {
                         .id(comment.getId())
                         .author(comment.getMember().getNickname())
                         .comment(comment.getComment())
-                        .trueOrFalse(successOrFailure(requestDto.getQuestionId(), comment.getComment()))
+                        .trueOrFalse(checkCorrectAnswer(requestDto.getQuestionId(), comment.getComment()))
                         .createdAt(comment.getCreatedAt())
                         .modifiedAt(comment.getModifiedAt())
                         .build()
@@ -66,7 +66,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public ResponseDto<?> getComment(Long commentId) {
-        Comment comment = isPresentComment(commentId);
+        Comment comment = checkingPresenceComment(commentId);
         if (null == comment) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 댓글 id 입니다.");
         }
@@ -76,7 +76,7 @@ public class CommentService {
                         .id(comment.getId())
                         .author(comment.getMember().getNickname())
                         .comment(comment.getComment())
-                        .trueOrFalse(successOrFailure(comment.getQuestion().getId(), comment.getComment()))
+                        .trueOrFalse(checkCorrectAnswer(comment.getQuestion().getId(), comment.getComment()))
                         .createdAt(comment.getCreatedAt())
                         .modifiedAt(comment.getModifiedAt())
                         .build()
@@ -85,7 +85,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public ResponseDto<?> getAllCommentsByQuestion(Long questionId) {
-        Question question = questionService.isPresentQuestion(questionId);
+        Question question = questionService.checkingPresenceQuestion(questionId);
         if (null == question) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 게시글 id 입니다.");
         }
@@ -99,7 +99,7 @@ public class CommentService {
                             .id(comment.getId())
                             .author(comment.getMember().getNickname())
                             .comment(comment.getComment())
-                            .trueOrFalse(successOrFailure(questionId, comment.getComment()))
+                            .trueOrFalse(checkCorrectAnswer(questionId, comment.getComment()))
                             .createdAt(comment.getCreatedAt())
                             .modifiedAt(comment.getModifiedAt())
                             .build()
@@ -121,7 +121,7 @@ public class CommentService {
             return ResponseDto.fail("INVALID_TOKEN", "Token이 유효하지 않습니다.");
         }
 
-        Comment comment = isPresentComment(commentId);
+        Comment comment = checkingPresenceComment(commentId);
         if (null == comment) {
             return ResponseDto.fail("NOT_FOUND", "존재하지 않는 댓글 id 입니다.");
         }
@@ -134,13 +134,13 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Comment isPresentComment(Long commentId) {
+    public Comment checkingPresenceComment(Long commentId) {
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         return optionalComment.orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public boolean successOrFailure(Long questionId, String comment) {
+    public boolean checkCorrectAnswer(Long questionId, String comment) {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         String answer = optionalQuestion.orElse(null).getAnswer();
         if (!answer.equals(comment)) { return false; }

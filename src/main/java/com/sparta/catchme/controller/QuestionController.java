@@ -2,6 +2,7 @@ package com.sparta.catchme.controller;
 
 import com.sparta.catchme.dto.request.QuestionRequestDto;
 import com.sparta.catchme.dto.response.ResponseDto;
+import com.sparta.catchme.repository.QuestionRepository;
 import com.sparta.catchme.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import java.io.IOException;
 @RestController
 public class QuestionController  {
     private final QuestionService questionService;
+    private final QuestionRepository questionRepository;
 
     @PostMapping(value = "/api/auth/questions")
     public ResponseDto<?> createQuestion(@RequestPart(required = false) MultipartFile multipartFile,
@@ -42,9 +44,6 @@ public class QuestionController  {
                                          @RequestPart(required = false) MultipartFile multipartFile,
                                          @RequestPart QuestionRequestDto questionRequestDto,
                                          HttpServletRequest request) throws IOException {
-        if (multipartFile.isEmpty()) {
-            return ResponseDto.fail("EMPTY", "multipart file is empty");
-        }
         return questionService.updateQuestion(questionId, multipartFile, questionRequestDto, request);
     }
 
