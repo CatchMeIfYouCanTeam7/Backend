@@ -11,12 +11,11 @@
 //    @Override
 //    public void addCorsMappings(CorsRegistry registry) {
 //        registry.addMapping("/**")
-//                .allowedOrigins("http://localhost:3000")
+//                .allowedOrigins("http://localhost:3000", "https://catch-me-if-you-can-ten.vercel.app/", "https://dwrxcg0uq83xr.cloudfront.net/")
 //                .allowedMethods("*")
 //                .allowedHeaders("*")
 //                .exposedHeaders("*")
-//                .exposedHeaders("Authorization")
-//                .exposedHeaders("Access-Token-Expire-Time")
+//                .exposedHeaders("Authorization", "Access-Token-Expire-Time")
 //                .allowCredentials(true)
 //                .maxAge(3000);
 //    }

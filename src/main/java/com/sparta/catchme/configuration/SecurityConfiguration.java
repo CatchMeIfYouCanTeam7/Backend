@@ -47,7 +47,8 @@ public class SecurityConfiguration {
   @Bean
   @Order(SecurityProperties.BASIC_AUTH_ORDER)
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.cors();
+    http.cors()
+                    .configurationSource(corsConfigurationSource());
 
     http.csrf().disable()
 
@@ -81,6 +82,8 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedOrigin("https://dvsubc9khip54.cloudfront.net/");
+        corsConfiguration.addAllowedOrigin("http://catch-me-if-you-can-07.s3-website.ap-northeast-2.amazonaws.com/");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addExposedHeader("Authorization");
         corsConfiguration.addExposedHeader("Access-Token-Expire-Time");
