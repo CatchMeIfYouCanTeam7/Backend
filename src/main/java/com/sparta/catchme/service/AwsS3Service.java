@@ -60,6 +60,13 @@ public class AwsS3Service {
         objectMetadata.setContentLength(bytes.length);
         ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
 
+        if (!file.isEmpty()) {
+            boolean isValid = FileUtils.validateImgFile(file.getInputStream());
+            if (!isValid) {
+                return "false";
+            }
+        }
+
         s3Client.putObject(new PutObjectRequest(bucket, fileName, byteArrayIs, objectMetadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return s3Client.getUrl(bucket, fileName).toString();

@@ -20,4 +20,5 @@ public class QuestionResponseDto {
     private String answer;
     private List<CommentResponseDto> commentResponseDto;
     private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
 }
