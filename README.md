@@ -58,10 +58,24 @@ Backend(Spring)<br>
   <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"><img src="https://img.shields.io/badge/Git-00000?style=for-the-badge&logo=Git&logoColor=F05032]"/><img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white]"/>
 
 # :key: 트러블 슈팅
-> 1) 백엔드 
- 
-> 2) 백엔드 
- 
+> 1)  파일업로드<br>
+
+S3 사진업로드를 테스트 하는 과정에서 macOS에서 찍은 일부 스크린샷 파일들이 올라가지않는것을 확인<br> 
+
+문제해결*
+<br>String fileName = awsS3Service.upload(multipartFile);
+<br>String imgUrl = URLDecoder.decode(fileName, "UTF-8");
+<br>기존에는 s3에서 업로드시 변환된 imgurl을 그대로 사용했는데 파일이 올라가는 과정에서 변환된 파일명에서 오류가 생긴걸 확인하고,
+<br>받아온 url을 한번더 변환을 통해 올라가지 않던 파일들을 정상적으로 올라가게 해결.
+> 2) CORS<br>
+
+서비스를 하는과정에 CORS 설정을 했지만 일부 오류가 발생하는 현상이 나타남
+<br>기존에 WebConfig에서 addCorsMappings를  이용하여 CORS 문제가 일어나지 않았지만 추가로 기능등을 확인하는 과정에서 발생하였음.<br>
+*문제해결
+<br>SecurityConfiguration에 CorsConfigurationSource를 이용하여 라이브러리를 주입하여 배포를 해보니 CORS를 해결.
+
+
+
 
  
  
